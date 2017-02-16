@@ -19,6 +19,56 @@ class Juicio extends Model
     protected $fillable=['causa','expediente','expteipsst','objeto','observaciones','fecha','vencimiento',
     'sentencia_id','objeto_id','descripcion','juzgado_id','estado_id','user_id'];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function abogados()
+    {
+        return $this->belongsToMany(Abogado::class,'abogado_juicio')->withTimeStamps();
+    }
+
+    public function etiquetas()
+    {
+        return $this->belongsToMany(Etiqueta::class,'etiqueta_juicio')->withTimeStamps();
+    }
+
+    public function eventos()
+    {
+        return $this->hasMany(Evento::class);
+    }
+
+    public function historials()
+    {
+        return $this->hasMany(Historial::class);
+    }
+
+    public function honorarios()
+    {
+        return $this->hasMany(Honorario::class);
+    }
+
+    public function estado()
+    {
+        return $this->belongsTo(Estado::class);
+    }
+
+    public function juzgado()
+    {
+        return $this->belongsTo(Juzgado::class);
+    }
+
+    public function sentencia()
+    {
+        return $this->belongsTo(Sentencia::class);
+    }
+
+    public function objeto()
+    {
+        return $this->belongsTo(Objeto::class);
+    }
+
     public function scopeBusqueda($query, $busqueda)
     {
         if (trim($busqueda) != "") {
@@ -105,59 +155,9 @@ class Juicio extends Model
 
     public function scopeSentencia($query, $sentencia)
     {
-    	if (trim($sentencia) != "") {
-    		$query->where('sentencia_id',$sentencia);
-    	}
+        if (trim($sentencia) != "") {
+            $query->where('sentencia_id',$sentencia);
+        }
     }
-
-	public function user()
-	{
-		return $this->belongsTo(User::class);
-	}
-
-    public function abogados()
-    {
-        return $this->belongsToMany(Abogado::class,'abogado_juicio')->withTimeStamps();
-    }
-
-    public function etiquetas()
-    {
-        return $this->belongsToMany(Etiqueta::class,'etiqueta_juicio')->withTimeStamps();
-    }
-
-	public function eventos()
-	{
-		return $this->hasMany(Evento::class);
-	}
-
-	public function historials()
-	{
-		return $this->hasMany(Historial::class);
-	}
-
-	public function honorarios()
-	{
-		return $this->hasMany(Honorario::class);
-	}
-
-	public function estado()
-	{
-		return $this->belongsTo(Estado::class);
-	}
-
-	public function juzgado()
-	{
-		return $this->belongsTo(Juzgado::class);
-	}
-
-	public function sentencia()
-	{
-		return $this->belongsTo(Sentencia::class);
-	}
-
-	public function objeto()
-	{
-		return $this->belongsTo(Objeto::class);
-	}
 
 }

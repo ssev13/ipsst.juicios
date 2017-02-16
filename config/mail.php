@@ -56,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => 'hello@example.com',
-        'name' => 'Example',
+        'address' => 'no-reply@ipsst.gov.ar',
+        'name' => 'No responder a este correo',
     ],
 
     /*

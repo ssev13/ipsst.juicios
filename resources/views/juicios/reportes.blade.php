@@ -132,6 +132,16 @@
                                 </select>               
                             </div>
 
+                            <div class="form-group">
+                                <label>Tipo de Evento</label>
+                                <select class="form-control" name='tipoevento'>
+                                  <option value=''>Todas las opciones  ...</option>
+                                  @foreach($tipoeventos as $tipoevento)
+                                        <option value='{{ $tipoevento->id }}'>{{ $tipoevento->nombre }}</option>
+                                  @endforeach
+                                </select>               
+                            </div>
+
 							<div class="form-group">
                                 <input type="submit" class="btn btn-default" value="Buscar">
                             </div>

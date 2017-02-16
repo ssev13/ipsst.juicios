@@ -85,6 +85,9 @@
                     <li>
                         <a href="{{ route('juicios.stats') }}"><i class="fa fa-fw fa-signal"></i> Estadísticas</a>
                     </li>
+                    <li>
+                        <a href="{{ route('juicios.help') }}"><i class="glyphicon glyphicon-question-sign"></i> Ayuda</a>
+                    </li>
 					<!--
                     <li>
                         <a href="bootstrap-elements.html"><i class="fa fa-fw fa-desktop"></i> Bootstrap Elements</a>

@@ -17,4 +17,5 @@ class Evento extends Model
 	{
 		return $this->belongsTo(Tipoevento::class);
 	}
+
 }

@@ -4,6 +4,7 @@ namespace App\Entities;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Notifications\esResetPassword as ResetPasswordNotification;
 
 class User extends Authenticatable
 {
@@ -32,6 +33,12 @@ class User extends Authenticatable
         return $this->hasMany(Juicio::class);
     }
 
+    public function juicios_vencidos()
+    {
+        $date = new Carbon('next monday');
+        return $this->where('vencimiento','<',$date);
+    }
+
     public function historials()
     {
         return $this->hasMany(Historial::class);
@@ -56,4 +63,10 @@ class User extends Authenticatable
                     ->orWhere('email','like','%'.$busqueda.'%');
         }
     }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
+    }    
+
 }

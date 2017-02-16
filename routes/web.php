@@ -15,6 +15,12 @@ Route::get('/sqlsrv123',[
     'as'   => 'juicios.testsql',
     'uses' => 'JuicioController@testsql'
 ]);
+
+Route::get('/ayuda',[
+    'as'   => 'juicios.help',
+    'uses' => 'JuicioController@help'
+]);
+
 /*
 Route::get('/juicios', function () {
     return view('juicios.juicios');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Response;
 use App\Entities\User;
 use App\Entities\Juicio;
 use App\Entities\Juzgado;
@@ -285,9 +286,11 @@ class JuicioController extends Controller
 
     public function list_venc()
     {
-        $date = new Carbon('next monday');
 
+        $date = new Carbon('next monday');
         $juicios = Juicio::where('vencimiento','<',$date)->paginate();
+
+//        $juicios = Juicio::juicios_vencidos()->paginate();
         return view('juicios.juicios', compact('juicios'));
     }
 
@@ -298,11 +301,13 @@ class JuicioController extends Controller
         $estados = Estado::all();
         $juzgados = Juzgado::all();
         $sentencias = Sentencia::all();
+        $tipoeventos = Tipoevento::all();
         $usuario =  \Auth::user();
         $vencimiento_hasta = new Carbon('next monday');
 
 //        return dd($usuario->id);
-        return view('juicios.reportes', compact('abogados','objetos','estados','juzgados','sentencias','usuario','vencimiento_hasta'));
+        return view('juicios.reportes', compact('abogados','objetos','estados','juzgados','sentencias','tipoeventos',
+            'usuario','vencimiento_hasta'));
     }
 
     public function report_show(Request $request)
@@ -325,6 +330,11 @@ class JuicioController extends Controller
             ->objeto($request->objeto)
             ->estado($request->estado)
             ->sentencia($request->sentencia);
+        $tipoevento= $request->tipoevento;
+
+        if ($tipoevento) {
+            $resultados=$resultados->whereHas('eventos', function($q) use($tipoevento) { $q->where('tipoevento_id', $tipoevento); });
+        }
 
         $cantidad = $resultados->count();
         $resultados = $resultados->paginate();
@@ -347,8 +357,8 @@ class JuicioController extends Controller
         $juiciovencexabog=Juicio::where('user_id',$usuario)
             ->where('vencimiento','<=',$date)
             ->count();
-        $juiciosvencidos=Juicio::where('vencimiento','<=',$date)
-            ->count();
+        $juiciosvencidos=Juicio::where('vencimiento','<',$date)->count();
+//        $juiciosvencidos=Juicio::JuiciosVencidos();
 
         $vencimientos=Juicio::where('user_id',$usuario)
             ->where('vencimiento','<=',$date)
@@ -511,6 +521,20 @@ class JuicioController extends Controller
 
 //        return dd($torta3);
         return view('juicios.charts', compact('torta1','label1','torta2','torta3'));
+    }
+
+    public function help()
+    {
+//        return dd('hola');
+        $filename = 'ayuda.pdf';
+        $path = ''.$filename; //storage_path($filename);
+
+        return Response::make(file_get_contents($path), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="'.$filename.'"'
+        ]);
+
+//        return view('ayuda.ayuda');
     }
 
     public function statsexample()
